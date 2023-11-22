@@ -35,25 +35,33 @@ const CreateEvent = () => {
 
     try {
       if (eventFile) {
-        const storageRef = ref(storage, eventData.filename);
+        const storageRef = ref(
+          storage,
+          eventData.filename.split(' ').join('-')
+        );
 
         await uploadBytes(storageRef, eventFile);
 
-        const downloadUrl = await getDownloadURL(storageRef);
-
-        if (downloadUrl) {
-          setEventData({ ...eventData, imgSrc: downloadUrl });
-        }
+        getDownloadURL(storageRef)
+          .then(downloadUrl =>
+            setEventData({ ...eventData, imgSrc: downloadUrl })
+          )
+          .then(async () => {
+            await setDoc(
+              doc(
+                db,
+                'events',
+                `${eventData.title.split(' ').join('-')}-${eventData.date}`
+              ),
+              eventData
+            );
+          })
+          .then(() => {
+            enqueueSnackbar(`Event ${eventData.title} Saved to the database`, {
+              variant: 'success',
+            });
+          });
       }
-
-      await setDoc(
-        doc(db, 'event', `${eventData.title}-${eventData.date}`),
-        eventData
-      );
-
-      enqueueSnackbar(`Event ${eventData.title} Saved to the database`, {
-        variant: 'success',
-      });
     } catch (e) {
       enqueueSnackbar(`Error adding document: ${e}`, { variant: 'error' });
     }
@@ -134,6 +142,7 @@ const CreateEvent = () => {
             type='file'
             className='d-none'
             id='file'
+            required
           />
         </div>
         <div className='col-xs-12 col-sm-4'>

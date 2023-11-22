@@ -7,6 +7,7 @@ import {
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { db } from '../services/firebase';
+import { enqueueSnackbar } from 'notistack';
 
 const ViewEvents = () => {
   const [events, setEvents] = useState<DocumentData[]>([]);
@@ -15,7 +16,7 @@ const ViewEvents = () => {
     setEvents([]);
 
     const unsubscribe = onSnapshot(
-      collection(db, 'event'),
+      collection(db, 'events'),
       snapshots => {
         const newEvents = snapshots.docs.map(doc => ({
           ...doc.data(),
@@ -39,34 +40,40 @@ const ViewEvents = () => {
   return (
     <div className='container'>
       <div className='row my-5 mx-auto'>
-        {events.length > 1 ? events.map(event => (
-          <div key={event.title} className='col-xs-12 col-sm-4'>
-            <div className='card' style={{ width: '18rem' }}>
+        {events.length > 0 ? (
+          events.map(event => (
+            <div key={event.title} className='card' style={{ width: '18rem' }}>
+              <img
+                src={event.imgSrc}
+                className='card-img-top'
+                alt={event.title}
+              />
               <div className='card-body'>
-                <h5 className='card-title text-uppercase fw-5'>
-                  {event.title}
-                </h5>
-                <h6 className='card-subtitle mb-2 text-muted'>{event.loc}</h6>
+                <h5 className='card-title'>{event.title}</h5>
                 <p className='card-text'>{event.desc}</p>
-                <div className='d-flex gap-4'>
-                  <button className='btn btn-primary text-uppercase'>
-                    Update
-                  </button>
-                  <button
-                    onClick={async () => {
-                      await deleteDoc(
-                        doc(db, 'event', `${event.title}-${event.date}`)
-                      );
-                    }}
-                    className='btn btn-danger text-uppercase'
-                  >
-                    Delete
-                  </button>
-                </div>
+                <button
+                  onClick={async () => {
+                    await deleteDoc(
+                      doc(
+                        db,
+                        'event',
+                        `${event.title.split(' ').join('-')}-${event.date}`
+                      )
+                    );
+                    enqueueSnackbar('Event deleted', { variant: 'success' });
+                  }}
+                  className='btn btn-danger text-uppercase'
+                >
+                  Delete
+                </button>
               </div>
             </div>
+          ))
+        ) : (
+          <div className='d-flex flex-column justify-content-center align-items-center'>
+            <h1>No event register yet</h1>
           </div>
-        )): <div className='d-flex flex-column justify-content-center align-items-center'><h1 className='text-danger h2'>No event registered yet</h1></div>}
+        )}
       </div>
     </div>
   );
