@@ -17,12 +17,14 @@ const ViewEvents = () => {
     const unsubscribe = onSnapshot(
       collection(db, 'event'),
       snapshots => {
-        snapshots.forEach(doc => {
-          const event: DocumentData = doc.data();
+        const newEvents = snapshots.docs.map(doc => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
 
-          setEvents([event]);
-        });
+        setEvents(newEvents);
       },
+
       error => {
         console.log(error);
       }

@@ -1,10 +1,28 @@
 import { doc, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
-import { db } from '../services/firebase';
+import { db, storage } from '../services/firebase';
 import { enqueueSnackbar } from 'notistack';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 const CreateEvent = () => {
-  const [eventData, setEventData] = useState({ title: '', date: '' });
+  const [eventData, setEventData] = useState({
+    title: '',
+    date: '',
+    filename: '',
+    imgSrc: '',
+  });
+  const [eventFile, setEventFile] = useState<File>();
+  const [isEventFile, setIsEventFile] = useState(false);
+  const [filename, setFilename] = useState('');
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target;
+
+    const selectedFile = files as FileList;
+    setEventFile(selectedFile?.[0]);
+    setFilename(selectedFile?.[0].name);
+    setIsEventFile(true);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -16,10 +34,23 @@ const CreateEvent = () => {
     e.preventDefault();
 
     try {
+      if (eventFile) {
+        const storageRef = ref(storage, eventData.filename);
+
+        await uploadBytes(storageRef, eventFile);
+
+        const downloadUrl = await getDownloadURL(storageRef);
+
+        if (downloadUrl) {
+          setEventData({ ...eventData, imgSrc: downloadUrl });
+        }
+      }
+
       await setDoc(
         doc(db, 'event', `${eventData.title}-${eventData.date}`),
         eventData
       );
+
       enqueueSnackbar(`Event ${eventData.title} Saved to the database`, {
         variant: 'success',
       });
@@ -84,42 +115,40 @@ const CreateEvent = () => {
       <div className='row g-3'>
         <div className='col-xs-12 col-sm-4'>
           <input
-            name='file1-text'
+            name='filename'
             onChange={handleChange}
             type='text'
             className='form-control form-control-lg'
-            id='file1'
-            placeholder='File 1'
+            placeholder='File name'
             accept='image/*, video/*'
           />
         </div>
         <div className='col-xs-12 col-sm-4'>
-          <label htmlFor='file 1' className='border border-1 p-2 rounded w-100'>
-            Select Video/Image
+          <label htmlFor='file' className='border border-1 p-2 rounded w-100'>
+            {isEventFile ? filename : 'Select Video/Image'}
           </label>
 
           <input
-            name='file1-file'
-            onChange={handleChange}
+            name='file'
+            onChange={handleFileChange}
             type='file'
             className='d-none'
-            id='file 1'
+            id='file'
           />
         </div>
         <div className='col-xs-12 col-sm-4'>
           <input
-            name='file1-desc'
+            name='fileDesc'
             onChange={handleChange}
             type='text'
             className='form-control form-control-lg'
-            id='file1-desc'
             placeholder='Description'
           />
         </div>
       </div>
 
-      <div className={`row g-3`}>
-        <div className='col-xs-12 col-sm-4'>
+      {/* <div className={`row g-3`}> */}
+      {/*  <div className='col-xs-12 col-sm-4'>
           <input
             name='file2-text'
             onChange={handleChange}
@@ -131,16 +160,16 @@ const CreateEvent = () => {
           />
         </div>
         <div className='col-xs-12 col-sm-4'>
-          <label htmlFor='file 2' className='border border-1 p-2 rounded w-100'>
+          <label htmlFor='file2' className='border border-1 p-2 rounded w-100'>
             Select Video/Image
           </label>
 
           <input
-            name='file2-file'
-            onChange={handleChange}
+            name='file2'
+            onChange={handleFileChange}
             type='file'
             className='d-none'
-            id='file 2'
+            id='file2'
           />
         </div>
         <div className='col-xs-12 col-sm-4'>
@@ -168,16 +197,16 @@ const CreateEvent = () => {
           />
         </div>
         <div className='col-xs-12 col-sm-4'>
-          <label htmlFor='file 3' className='border border-1 p-2 rounded w-100'>
+          <label htmlFor='file3' className='border border-1 p-2 rounded w-100'>
             Select Video/Image
           </label>
 
           <input
-            name='file3-file'
+            name='file3'
             onChange={handleChange}
             type='file'
             className='d-none'
-            id='file 1'
+            id='file3'
           />
         </div>
         <div className='col-xs-12 col-sm-4'>
@@ -205,16 +234,16 @@ const CreateEvent = () => {
           />
         </div>
         <div className='col-xs-12 col-sm-4'>
-          <label htmlFor='file 4' className='border border-1 p-2 rounded w-100'>
+          <label htmlFor='file4' className='border border-1 p-2 rounded w-100'>
             Select Video/Image
           </label>
 
           <input
-            name='file4-file'
+            name='file4'
             onChange={handleChange}
             type='file'
             className='d-none'
-            id='file 4'
+            id='file4'
           />
         </div>
         <div className='col-xs-12 col-sm-4'>
@@ -236,22 +265,21 @@ const CreateEvent = () => {
             onChange={handleChange}
             type='text'
             className='form-control form-control-lg'
-            id='file5'
             placeholder='File 5'
             accept='image/*, video/*'
           />
         </div>
         <div className='col-xs-12 col-sm-4'>
-          <label htmlFor='file 5' className='border border-1 p-2 rounded w-100'>
+          <label htmlFor='file5' className='border border-1 p-2 rounded w-100'>
             Select Video/Image
           </label>
 
           <input
-            name='file5-input'
+            name='file5'
             onChange={handleChange}
             type='file'
             className='d-none'
-            id='file 5'
+            id='file5'
           />
         </div>
         <div className='col-xs-12 col-sm-4'>
@@ -284,7 +312,7 @@ const CreateEvent = () => {
           </label>
 
           <input
-            name='file6-file'
+            name='file6'
             onChange={handleChange}
             type='file'
             className='d-none'
@@ -300,8 +328,8 @@ const CreateEvent = () => {
             id='file6-desc'
             placeholder='Description'
           />
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
 
       <div className='row g-3'>
         <div className='col-xs-12 col-sm-6'>
