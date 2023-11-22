@@ -14,6 +14,7 @@ const CreateEvent = () => {
   const [eventFile, setEventFile] = useState<File>();
   const [isEventFile, setIsEventFile] = useState(false);
   const [filename, setFilename] = useState('');
+  const [filetype, setFiletype] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,7 +23,10 @@ const CreateEvent = () => {
     const selectedFile = files as FileList;
     setEventFile(selectedFile?.[0]);
     setFilename(selectedFile?.[0].name);
+    setFiletype(selectedFile?.[0].type);
     setIsEventFile(true);
+
+    console.log(selectedFile?.[0]);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,12 +42,15 @@ const CreateEvent = () => {
 
     try {
       if (eventFile) {
+        const metadata = {
+          contentType: filetype
+        };
         const storageRef = ref(
           storage,
           eventData.filename.split(' ').join('-')
         );
 
-        await uploadBytes(storageRef, eventFile);
+        await uploadBytes(storageRef, eventFile, metadata);
 
         getDownloadURL(storageRef)
           .then(downloadUrl =>
