@@ -39,7 +39,7 @@ const ViewEvents = () => {
   return (
     <div className='container'>
       <div className='row my-5 mx-auto'>
-        {events.map(event => (
+        {events.length > 1 ? events.map(event => (
           <div key={event.title} className='col-xs-12 col-sm-4'>
             <div className='card' style={{ width: '18rem' }}>
               <div className='card-body'>
@@ -66,7 +66,7 @@ const ViewEvents = () => {
               </div>
             </div>
           </div>
-        ))}
+        )): <div className='d-flex flex-column justify-content-center align-items-center'><h1 className='text-danger h2'>No event registered yet</h1></div>}
       </div>
     </div>
   );
