@@ -14,6 +14,7 @@ const CreateEvent = () => {
   const [eventFile, setEventFile] = useState<File>();
   const [isEventFile, setIsEventFile] = useState(false);
   const [filename, setFilename] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
@@ -32,6 +33,8 @@ const CreateEvent = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setLoading(true);
 
     try {
       if (eventFile) {
@@ -60,6 +63,9 @@ const CreateEvent = () => {
             enqueueSnackbar(`Event ${eventData.title} Saved to the database`, {
               variant: 'success',
             });
+          })
+          .then(() => {
+            setLoading(false);
           });
       }
     } catch (e) {
@@ -342,9 +348,20 @@ const CreateEvent = () => {
 
       <div className='row g-3'>
         <div className='col-xs-12 col-sm-6'>
-          <button type='submit' className='btn btn-primary w-100'>
-            Save
-          </button>
+          {!loading ? (
+            <button type='submit' className='btn btn-primary w-100'>
+              Save
+            </button>
+          ) : (
+            <button className='btn btn-primary w-100 d-flex gap-3 justify-content-center align-items-center' type='button' disabled>
+              <span
+                className='spinner-border spinner-border-sm'
+                role='status'
+                aria-hidden='true'
+              ></span>
+              Saving Event...
+            </button>
+          )}
         </div>
         <div className='col-xs-12 col-sm-6'>
           <button type='reset' className='btn btn-danger w-100'>
