@@ -69,33 +69,44 @@ const ViewEvents = () => {
               key={event.title}
               className='col-xs-12 col-md-4 d-flex justify-content-center'
             >
-              <div className='card' style={{ width: '18rem' }}>
-                <div className='card-body'>
-                  <h4
-                    className='card-title text-truncate text-uppercase'
-                    title={event.title}
-                  >
-                    {event.title}
-                  </h4>
-                  <h5 className='card-subtitle mb-2 text-muted'>
-                    {event.date}
-                  </h5>
-                  <p className='card-text text-truncate' title={event.desc}>
-                    {event.desc}
-                  </p>
-                  <h6>Files</h6>
-                  <p>{event.filename}</p>
+              <div
+                className='shadow-sm mx-auto p-4 border border-1 rounded'
+                style={{ width: 250 }}
+              >
+                <h3 className='h4'>
+                  {event.title || 'Title'} <br />
+                </h3>
+                <p className='text-muted'>{event.date || '29-11-2023'}</p>
+                <p className='text-muted mb-4'>
+                  <span>Venue: </span>
+                  {event.loc || 'Location'}
+                </p>
+
+                <p className=''>{event.desc || 'Event description'}</p>
+                <div className='border border-1 mb-3' />
+                <p>
+                  <span className='text-success'>{event.fileCount}</span>{' '}
+                  file(s) selected
+                </p>
+                <div className='d-flex gap-2'>
+                  <span>
+                    Image:{' '}
+                    <span className='text-success'>{event.imageCount}</span>
+                  </span>
+                  |
+                  <span>
+                    Video:{' '}
+                    <span className='text-success'>{event.videoCount}</span>
+                  </span>
+                </div>
+                <div className='mt-4'>
                   <button
                     onClick={async () => {
                       await deleteDoc(
-                        doc(
-                          db,
-                          'events',
-                          `${event.title.split(' ').join('-')}-${event.date}`
-                        )
+                        doc(db, 'events', `${event.title}-${event.date}`)
                       );
                     }}
-                    className='btn btn-danger text-uppercase'
+                    className='btn btn-danger text-uppercase w-100'
                   >
                     Delete
                   </button>
@@ -104,9 +115,207 @@ const ViewEvents = () => {
             </div>
           ))
         ) : (
-          <div className='d-flex flex-column justify-content-center align-items-center'>
-            <h1>No event registered yet</h1>
-          </div>
+          <>
+            <div className='col-xs-12 col-md-4 d-flex justify-content-center'>
+              <div
+                className='shadow-sm mx-auto p-4 border border-1 rounded'
+                style={{ width: 250 }}
+              >
+                <h3 className='h4'>
+                  <span className='placeholder col-7'></span>
+                </h3>
+                <p className='text-muted'>
+                  <span className='placeholder col-4'></span>
+                </p>
+                <p className='text-muted mb-4'>
+                  <span className='placeholder col-4'></span>
+                  <span className='placeholder col-5'></span>
+                </p>
+
+                <p className=''>
+                  <span className='placeholder col-10'></span>
+                </p>
+                <div className='border border-1 mb-3' />
+                <p>
+                  <span className='placeholder col-4'></span>
+                  <span className='placeholder col-4'></span>
+                </p>
+                <div className='d-flex gap-2'>
+                  <span className='placeholder col-4'></span>|
+                  <span className='placeholder col-4'></span>
+                </div>
+                <div className='mt-4'>
+                  <span className='placeholder w-100'></span>
+                </div>
+              </div>
+            </div>
+
+            <div className='col-xs-12 col-md-4 d-flex justify-content-center'>
+              <div
+                className='shadow-sm mx-auto p-4 border border-1 rounded'
+                style={{ width: 250 }}
+              >
+                <h3 className='h4'>
+                  <span className='placeholder col-7'></span>
+                </h3>
+                <p className='text-muted'>
+                  <span className='placeholder col-4'></span>
+                </p>
+                <p className='text-muted mb-4'>
+                  <span className='placeholder col-4'></span>
+                  <span className='placeholder col-5'></span>
+                </p>
+
+                <p className=''>
+                  <span className='placeholder col-10'></span>
+                </p>
+                <div className='border border-1 mb-3' />
+                <p>
+                  <span className='placeholder col-4'></span>
+                  <span className='placeholder col-4'></span>
+                </p>
+                <div className='d-flex gap-2'>
+                  <span className='placeholder col-4'></span>|
+                  <span className='placeholder col-4'></span>
+                </div>
+                <div className='mt-4'>
+                  <span className='placeholder col-4'></span>
+                </div>
+              </div>
+            </div>
+            <div className='col-xs-12 col-md-4 d-flex justify-content-center'>
+              <div
+                className='shadow-sm mx-auto p-4 border border-1 rounded'
+                style={{ width: 250 }}
+              >
+                <h3 className='h4'>
+                  <span className='placeholder col-7'></span>
+                </h3>
+                <p className='text-muted'>
+                  <span className='placeholder col-4'></span>
+                </p>
+                <p className='text-muted mb-4'>
+                  <span className='placeholder col-4'></span>
+                  <span className='placeholder col-5'></span>
+                </p>
+
+                <p className=''>
+                  <span className='placeholder col-10'></span>
+                </p>
+                <div className='border border-1 mb-3' />
+                <p>
+                  <span className='placeholder col-4'></span>
+                  <span className='placeholder col-4'></span>
+                </p>
+                <div className='d-flex gap-2'>
+                  <span className='placeholder col-4'></span>|
+                  <span className='placeholder col-4'></span>
+                </div>
+                <div className='mt-4'>
+                  <span className='placeholder w-100'></span>
+                </div>
+              </div>
+            </div>
+            <div className='col-xs-12 col-md-4 d-flex justify-content-center'>
+              <div
+                className='shadow-sm mx-auto p-4 border border-1 rounded'
+                style={{ width: 250 }}
+              >
+                <h3 className='h4'>
+                  <span className='placeholder col-7'></span>
+                </h3>
+                <p className='text-muted'>
+                  <span className='placeholder col-4'></span>
+                </p>
+                <p className='text-muted mb-4'>
+                  <span className='placeholder col-4'></span>
+                  <span className='placeholder col-5'></span>
+                </p>
+
+                <p className=''>
+                  <span className='placeholder col-10'></span>
+                </p>
+                <div className='border border-1 mb-3' />
+                <p>
+                  <span className='text-success'>0</span>{' '}
+                  <span className='placeholder col-4'></span>
+                </p>
+                <div className='d-flex gap-2'>
+                  <span className='placeholder col-4'></span>|
+                  <span className='placeholder col-4'></span>
+                </div>
+                <div className='mt-4'>
+                  <span className='placeholder w-100'></span>
+                </div>
+              </div>
+            </div>
+            <div className='col-xs-12 col-md-4 d-flex justify-content-center'>
+              <div
+                className='shadow-sm mx-auto p-4 border border-1 rounded'
+                style={{ width: 250 }}
+              >
+                <h3 className='h4'>
+                  <span className='placeholder col-7'></span>
+                </h3>
+                <p className='text-muted'>
+                  <span className='placeholder col-4'></span>
+                </p>
+                <p className='text-muted mb-4'>
+                  <span className='placeholder col-4'></span>
+                  <span className='placeholder col-5'></span>
+                </p>
+
+                <p className=''>
+                  <span className='placeholder col-10'></span>
+                </p>
+                <div className='border border-1 mb-3' />
+                <p>
+                  <span className='placeholder col-4'></span>
+                  <span className='placeholder col-4'></span>
+                </p>
+                <div className='d-flex gap-2'>
+                  <span className='placeholder col-4'></span>|
+                  <span className='placeholder col-4'></span>
+                </div>
+                <div className='mt-4'>
+                  <span className='placeholder w-100'></span>
+                </div>
+              </div>
+            </div>
+            <div className='col-xs-12 col-md-4 d-flex justify-content-center'>
+              <div
+                className='shadow-sm mx-auto p-4 border border-1 rounded'
+                style={{ width: 250 }}
+              >
+                <h3 className='h4'>
+                  <span className='placeholder col-7'></span>
+                </h3>
+                <p className='text-muted'>
+                  <span className='placeholder col-4'></span>
+                </p>
+                <p className='text-muted mb-4'>
+                  <span className='placeholder col-4'></span>
+                  <span className='placeholder col-5'></span>
+                </p>
+
+                <p className=''>
+                  <span className='placeholder col-10'></span>
+                </p>
+                <div className='border border-1 mb-3' />
+                <p>
+                  <span className='placeholder col-4'></span>
+                  <span className='placeholder col-4'></span>
+                </p>
+                <div className='d-flex gap-2'>
+                  <span className='placeholder col-4'></span>|
+                  <span className='placeholder col-4'></span>
+                </div>
+                <div className='mt-4'>
+                  <span className='placeholder w-100'></span>
+                </div>
+              </div>
+            </div>
+          </>
         )}
       </div>
     </div>
