@@ -3,13 +3,27 @@
   line-height: 1.5;
   font-weight: 400;
 
-  /* color: rgba(255, 255, 255, 0.87); */
-  /* background-color: #242424; */
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --bs-primary: #435585;
+  --bs-primary-rgb: 67, 85, 133;
+  --bs-secondary: #435585;
+  --bs-secondary-rgb: 67, 84, 132;
+  --bs-light: #F5E8C7;
+  --bs-light-rgb: 245, 232, 199;
+  --bs-body-bg: #F5E8C7;
+  --bs-body-bg-rgb: 245, 232, 199;
+  --bs-dark: #363062;
+  --bs-dark-rgb: 54, 48, 98;
+  --bs-body-color: #363062;
+  --bs-body-color-rgb: 54, 48, 99;
+}
+
+* {
+  font-size: 1rem;
 }
 
 a {
@@ -23,12 +37,7 @@ a:hover {
 
 body {
   margin: 0;
-  /* display: flex;
-  place-items: center;
-  justify-content: center;
-  min-width: 320px;
-  min-height: 100vh; */
-  font-size: 1rem;
+  background: #f5e8c7;
 }
 
 h1 {
@@ -68,4 +77,34 @@ input[type='date']:valid:before {
 
 label {
   cursor: pointer;
+}
+
+::placeholder {
+  font-size: 0.9rem;
+}
+
+input:focus,
+input {
+  font-size: 1rem;
+}
+
+.my-card {
+  background: whitesmoke;
+}
+
+.btn-primary {
+      --bs-btn-color: whitesmoke;
+    --bs-btn-bg:var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-color: var(--bs-light);
+    --bs-btn-hover-bg: var(--bs-primary);
+    --bs-btn-hover-border-color: var(--bs-primary);
+    --bs-btn-focus-shadow-rgb: 49,132,253;
+    --bs-btn-active-color: var(--bs-light);
+    --bs-btn-active-bg: var(--bs-primary);
+    --bs-btn-active-border-color: var(--bs-primary);
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: var(--bs-light);
+    --bs-btn-disabled-bg: var(--bs-primary);
+    --bs-btn-disabled-border-color: var(--bs-primary);
 }

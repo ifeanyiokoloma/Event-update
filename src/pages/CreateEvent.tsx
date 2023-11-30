@@ -4,6 +4,7 @@ import { storeData } from '../services/functions';
 import { arrayUnion, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from '../services/firebase';
+import Header from '../components/Header';
 
 const CreateEvent = () => {
   const [eventDoc, setEventDoc] = useState({
@@ -61,7 +62,7 @@ const CreateEvent = () => {
 
     const eventDocRef = await storeData(
       'events',
-      `${eventDoc.title}-${eventDoc.date}`,
+      `${eventDoc.title.split(' ').join('_')}_${eventDoc.date}`,
       { ...eventDoc, mediaSrc: [], imageCount, videoCount, fileCount }
     );
 
@@ -112,7 +113,7 @@ const CreateEvent = () => {
             getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
               console.log('File available at', downloadURL);
               await updateDoc(eventDocRef, {
-                mediaSrc: arrayUnion(downloadURL),
+                mediaSrc: arrayUnion({ downloadURL, fileType: file.type }),
               });
             });
           }
@@ -123,16 +124,16 @@ const CreateEvent = () => {
   };
 
   return (
-    <main>
-      <h1 className='h2 text-center text-uppercase mb-3'>Create Event</h1>
+    <main className='container'>
+      <Header>Create Event</Header>
       <div
-        className='shadow-sm mx-auto p-4 border border-1 rounded'
+        className='shadow mx-auto p-4 border border-1 rounded my-card'
         style={{ width: 250 }}
       >
-        <h3 className='h4'>
+        <h3 className='h4 text-uppercase mb-3'>
           {eventDoc.title || 'Title'} <br />
         </h3>
-        <p className='text-muted'>{eventDoc.date || '29-11-2023'}</p>
+        <p className='text-muted mb-2'>{eventDoc.date || '29-11-2023'}</p>
         <p className='text-muted mb-4'>
           <span>Venue: </span>
           {eventDoc.loc || 'Location'}
@@ -140,7 +141,10 @@ const CreateEvent = () => {
 
         <p className=''>{eventDoc.desc || 'Event description'}</p>
         <div className='border border-1 mb-3' />
-        <p>
+        <h2 className='h6 text-uppercase mb-3'>
+          {eventDoc.filename || 'Album title'}
+        </h2>
+        <p className='mb-2'>
           <span className='text-success'>{fileCount}</span> file(s) selected
         </p>
         <div className='d-flex gap-2'>
@@ -163,7 +167,7 @@ const CreateEvent = () => {
               name='title'
               onChange={handleChange}
               type='text'
-              className='form-control form-control-lg'
+              className='form-control shadow'
               id='title'
               placeholder='Title'
               required
@@ -174,7 +178,7 @@ const CreateEvent = () => {
               name='desc'
               onChange={handleChange}
               type='text'
-              className='form-control form-control-lg'
+              className='form-control shadow'
               placeholder='Description'
               required
             />
@@ -184,7 +188,7 @@ const CreateEvent = () => {
               name='loc'
               onChange={handleChange}
               type='text'
-              className='form-control form-control-lg'
+              className='form-control shadow'
               id='loc'
               placeholder='Location'
               required
@@ -195,7 +199,7 @@ const CreateEvent = () => {
               name='date'
               onChange={handleChange}
               type='date'
-              className='w-100 p-2'
+              className='w-100 p-2 rounded border border-1 shadow'
               id='date'
               placeholder='Date'
               required
@@ -210,8 +214,8 @@ const CreateEvent = () => {
               name='filename'
               onChange={handleChange}
               type='text'
-              className='form-control form-control-lg'
-              placeholder='File Label'
+              className='form-control shadow'
+              placeholder='Album Title'
               accept='image/*, video/*'
             />
           </div>
@@ -219,11 +223,18 @@ const CreateEvent = () => {
           <div className='col-xs-12 col-sm-4'>
             <label
               htmlFor='file'
-              className='border border-1 p-2 rounded w-100 text-truncate text-muted'
+              className='border border-1 py-2 px-3 rounded w-100 text-truncate text-muted shadow bg-white'
+              title={
+                fileCount
+                  ? `${fileCount} file Ready to Upload`
+                  : 'Select Images and/or Videos'
+              }
             >
               {fileCount
-                ? `${fileCount} file ready to upload`
-                : 'Select images and/or videos'}
+                ? `${
+                    fileCount > 1 ? `${fileCount} files` : `${fileCount} file`
+                  } Ready to Upload`
+                : 'Upload Images and/or Videos'}
             </label>
 
             <input
@@ -243,8 +254,8 @@ const CreateEvent = () => {
               name='fileDesc'
               onChange={handleChange}
               type='text'
-              className='form-control form-control-lg'
-              placeholder='File Description'
+              className='form-control shadow'
+              placeholder='Album Note'
             />
           </div>
           {/* File ends */}
@@ -252,13 +263,12 @@ const CreateEvent = () => {
 
         <div className='row g-3'>
           <div className='col-xs-12 col-sm-6'>
-            <p className='alert alert-info'>Videos will take time to upload</p>
             {!loading ? (
-              <button type='submit' className='btn btn-primary w-100'>
+              <button type='submit' className='btn btn-primary w-100 shadow'>
                 Save
               </button>
             ) : (
-              <div className='progress' style={{ height: '40px' }}>
+              <div className='progress shadow' style={{ height: '40px' }}>
                 <div
                   className='progress-bar progress-bar-striped progress-bar-animated fw-1 text-capitalize h6'
                   role='progressbar'
@@ -272,7 +282,7 @@ const CreateEvent = () => {
             )}
           </div>
           <div className='col-xs-12 col-sm-6'>
-            <button type='reset' className='btn btn-danger w-100'>
+            <button type='reset' className='btn btn-danger w-100 shadow'>
               Reset
             </button>
           </div>

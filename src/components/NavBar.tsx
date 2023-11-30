@@ -1,27 +1,24 @@
-import { Container, Navbar } from 'react-bootstrap';
+import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const NavBar = () => {
   return (
-    <Navbar collapseOnSelect expand='lg' className='bg-body-tertiary'>
+    <Navbar collapseOnSelect expand='lg' bg='primary'>
       <Container>
-        <Link className='navbar-brand' to='/'>
+        <Link className='navbar-brand text-light' to='/'>
           GL
         </Link>
-        <Navbar.Toggle aria-controls='responsive-navbar-nav' />
+        <Navbar.Toggle aria-controls='responsive-navbar-nav' color='light' />
         <Navbar.Collapse id='responsive-navbar-nav'>
-          <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
-            <li className='nav-item'>
-              <Link className='nav-link' to='/'>
-                Create Event
-              </Link>
-            </li>
-            <li className='nav-item'>
-              <Link className='nav-link' to='/events'>
-                Events
-              </Link>
-            </li>
-          </ul>
+          <Nav className='me-auto'>
+            <Link className='nav-link text-white' to='/'>
+              Create Event
+            </Link>
+
+            <Link className='nav-link text-white' to='/events'>
+              Events
+            </Link>
+          </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
