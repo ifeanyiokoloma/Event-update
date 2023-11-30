@@ -69,9 +69,8 @@ export async function eventsLoader() {
   const querySnapshot = await getDocs(collection(db, 'events'));
 
   querySnapshot.forEach(doc => {
-    const event = doc.data();
     const eventId = doc.id;
-    return events.push({ event, eventId });
+    return events.push({ ...doc.data(), eventId });
   });
 
   return { events };

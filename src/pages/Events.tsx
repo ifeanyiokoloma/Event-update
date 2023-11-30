@@ -1,14 +1,26 @@
 import { db } from '../services/firebase';
-import { Link, useLoaderData } from 'react-router-dom';
+import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import { eventsLoaderProp } from '../services/functions';
 import { deleteDoc, doc } from 'firebase/firestore';
 
 const Events = () => {
   const { events } = useLoaderData() as eventsLoaderProp;
+  const navigate = useNavigate()
 
-  const handleDelete = async (id: string) => {
-    await deleteDoc(doc(db, 'events', id));
+  console.log(events);
+
+  const handleDelete = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    id: string
+  ) => {
+    e.currentTarget.value = 'deleting';
+    try {
+      await deleteDoc(doc(db, 'events', id));
+      navigate("/")
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -18,7 +30,7 @@ const Events = () => {
         {events.length > 0 ? (
           events.map(event => (
             <div
-              key={event.title}
+              key={event.eventId}
               className='col-xs-12 col-md-4 d-flex justify-content-center'
             >
               <div
@@ -58,8 +70,9 @@ const Events = () => {
                   >
                     View Event
                   </Link>
+
                   <button
-                    onClick={() => handleDelete(event.eventId)}
+                    onClick={(e) => handleDelete(e, event.eventId)}
                     className='btn btn-danger text-uppercase w-100'
                   >
                     Delete

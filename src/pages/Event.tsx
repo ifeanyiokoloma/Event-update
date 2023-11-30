@@ -17,8 +17,8 @@ const Event = () => {
             {event.filename} Album
           </h2>
           <Accordion flush className='shadow rounded'>
-            <AccordionItem eventKey='0'>
-              <AccordionHeader className='accordion-header'>
+            <AccordionItem as='section' eventKey='0'>
+              <AccordionHeader as='h3' className='accordion-header'>
                 {event.imageCount} Pictures
               </AccordionHeader>
               <AccordionBody className='d-flex flex-column gap-4'>
@@ -26,7 +26,7 @@ const Event = () => {
                   ? event.mediaSrc
                       .filter(src => src.fileType.includes('image'))
                       .map(src => (
-                        <div>
+                        <div key={src.downloadURL}>
                           <img src={src.downloadURL} width={300} height={300} />
                         </div>
                       ))
@@ -34,8 +34,8 @@ const Event = () => {
               </AccordionBody>
             </AccordionItem>
 
-            <AccordionItem eventKey='1'>
-              <AccordionHeader className='accordion-header'>
+            <AccordionItem as='section' eventKey='1'>
+              <AccordionHeader as='h3' className='accordion-header'>
                 {event.videoCount} Videos
               </AccordionHeader>
               <AccordionBody className='d-flex flex-column gap-5'>
@@ -63,16 +63,16 @@ const Event = () => {
           <h2 className='h5 mb-4 text-secondary'>Event Details</h2>
           <p>
             <span className='text-muted'>Location: </span>
-            <span>{event.loc}</span>
+            <b>{event.loc}</b>
           </p>
           <p className='mb-5'>
             <span className='text-muted'>Date: </span>
-            <span>{event.date}</span>
+            <b>{event.date}</b>
           </p>
-          <p>
-            <h3 className='text-muted h6'>Description: </h3>
-            <span className='d-block'>{event.desc}</span>
-          </p>
+          <article>
+            <h3 className='text-muted h5'>Description: </h3>
+            <p className='d-block'>{event.desc}</p>
+          </article>
         </section>
       </main>
     </div>
