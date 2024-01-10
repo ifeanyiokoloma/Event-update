@@ -4,6 +4,7 @@ import ViewEvents from '../pages/Events';
 import Layout from '../components/Layout';
 import Event from '../pages/Event';
 import { eventLoader, eventsLoader } from './functions';
+import Account from '../pages/Account';
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
         path: '/events/:eventId',
         element: <Event />,
         loader: eventLoader,
+      },
+      {
+        path: '/account',
+        element: <Account />,
       },
     ],
   },
